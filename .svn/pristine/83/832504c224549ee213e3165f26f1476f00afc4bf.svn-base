@@ -1,0 +1,7 @@
+package com.sist.retail.sale.dao;
+
+import com.sist.retail.common.WorkDiv;
+
+public interface SaleDao extends WorkDiv{
+
+}

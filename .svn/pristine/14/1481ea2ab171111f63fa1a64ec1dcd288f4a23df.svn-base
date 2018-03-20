@@ -1,0 +1,32 @@
+package com.sist.retail.sale.svc;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
+import com.sist.retail.common.DTO;
+import com.sist.retail.sale.dao.SaleDaoImpl;
+/**
+ *  판매 서비스
+ * @author Kang Hyun Gu
+ * @since 2017-12-19
+ * @version 0.01
+ *
+ */
+@Service
+public class SaleSvcImpl implements SaleSvc {
+	@Autowired
+	SaleDaoImpl saleDaoImpl=new SaleDaoImpl();
+	@Override
+	public int do_add(DTO dto) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return saleDaoImpl.do_add(dto);
+	}
+
+	@Override
+	public int do_update(DTO dto) {
+		// TODO Auto-generated method stub
+		return saleDaoImpl.do_update(dto);
+	}
+
+}

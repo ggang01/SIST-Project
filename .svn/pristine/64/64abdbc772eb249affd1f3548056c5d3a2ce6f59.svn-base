@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.retail.mappers.logisticsManagement">
+
+ <sql id="search_param">
+		<where>
+			<choose>
+				<when test="search_div == '10'">   <!-- 지점명 -->
+					T1.CM_ID LIKE #{search_word} || '%'
+				</when>
+				<when test="search_div == '20'">   <!-- 주소명 -->
+					T1.NAME LIKE #{search_word} || '%'
+				</when>
+				<otherwise></otherwise>
+			</choose>
+		</where>
+	</sql>
+	
+
+<!-- 재고출력화면 ProductStock -->
+	<select id="do_search" parameterType="com.sist.retail.vo.ProductStockVo" resultType="com.sist.retail.vo.ProductStockVo">
+		
+		SELECT TT1.PDT_NO,
+				TT1.PDT_GB,
+				TT1.PDT_NM,
+				TT1.PRICE,
+				TT1.STK_CNT,
+				TT1.MK_NM,
+				TT1.ORD_CNT,
+				TT1.ORD_CD,
+				TT1.RNUM,
+				TT1.TOTAL_CNT as totalNo
+
+		FROM(
+			SELECT   P.PDT_NO,
+	                P.PDT_GB,
+	                P.PDT_NM,
+	                P.PRICE,
+	                T.STK_CNT,
+	                M.MK_NM,
+	                R.ORD_CNT,
+	                R.ORD_CD,
+	                ROW_NUMBER() OVER(ORDER BY P.PDT_NO DESC ) AS RNUM,
+		            COUNT(*) OVER() AS TOTAL_CNT       
+	        FROM  
+	             PRODUCT_TB P 
+	             LEFT OUTER JOIN ORDER_TB R
+	               ON P.PDT_NO=R.PDT_NO
+	             LEFT OUTER JOIN STOCK_TB T
+	               ON P.PDT_NO = T.PDT_NO
+	             ,MAKER_TB M
+	        WHERE P.MK_NO=M.MK_NO AND T.STO_ID =#{stoId,jdbcType=VARCHAR}
+	        )TT1
+	   WHERE RNUM BETWEEN (#{page_size,jdbcType=VARCHAR} * (#{page_num,jdbcType=VARCHAR}-1)+1 ) 
+		   AND (#{page_size,jdbcType=VARCHAR} * (#{page_num,jdbcType=VARCHAR}-1)+#{page_size,jdbcType=VARCHAR})   
+	        
+	</select>
+<!-- 상품군 재고출력화면 ProductStock -->
+	<select id="do_search_group" parameterType="com.sist.retail.vo.ProductStockVo" resultType="com.sist.retail.vo.ProductStockVo">
+			SELECT TT1.PDT_NO,
+				TT1.PDT_GB,
+				TT1.PDT_NM,
+				TT1.PRICE,
+				TT1.STK_CNT,
+				TT1.MK_NM,
+				TT1.ORD_CNT,
+				TT1.ORD_CD,
+				TT1.RNUM,
+				TT1.TOTAL_CNT as totalNo
+
+		FROM(
+			SELECT   P.PDT_NO,
+	                P.PDT_GB,
+	                P.PDT_NM,
+	                P.PRICE,
+	                T.STK_CNT,
+	                M.MK_NM,
+	                R.ORD_CNT,
+	                R.ORD_CD,
+	                ROW_NUMBER() OVER(ORDER BY P.PDT_NO DESC ) AS RNUM,
+		            COUNT(*) OVER() AS TOTAL_CNT       
+	        FROM  
+	             PRODUCT_TB P 
+	             LEFT OUTER JOIN ORDER_TB R
+	               ON P.PDT_NO=R.PDT_NO
+	             LEFT OUTER JOIN STOCK_TB T
+	               ON P.PDT_NO = T.PDT_NO
+	             ,MAKER_TB M
+	        WHERE P.MK_NO=M.MK_NO AND T.STO_ID =#{stoId,jdbcType=VARCHAR} AND P.PDT_GB=#{pdtGb,jdbcType=VARCHAR}
+	        )TT1
+	   WHERE RNUM BETWEEN (#{page_size,jdbcType=VARCHAR} * (#{page_num,jdbcType=VARCHAR}-1)+1 ) 
+		   AND (#{page_size,jdbcType=VARCHAR} * (#{page_num,jdbcType=VARCHAR}-1)+#{page_size,jdbcType=VARCHAR})   
+       
+	</select>
+
+<!-- 상품군별 인기순위 검색문 -->
+	<select id="do_search_favo" parameterType="com.sist.retail.vo.SaleProductVo" resultType="com.sist.retail.vo.SaleProductVo">
+		SELECT PDT_GB,PDT_NM, SUMSAL
+		FROM (
+    	  SELECT P.PDT_NO,P.PDT_GB,P.PDT_NM, SUM(SAL_CNT) AS SUMSAL
+   	 	  FROM SALE_TB A,PRODUCT_TB P 
+    	  WHERE A.PDT_NO = P.PDT_NO AND PDT_GB=#{pdtGb,jdbcType=VARCHAR}
+    	  GROUP BY P.PDT_NO,P.PDT_NM,P.PDT_GB
+      	  ORDER BY SUMSAL DESC
+     		 )P1
+   	     WHERE ROWNUM=1 OR ROWNUM=2 OR ROWNUM=3 
+	</select>
+<!-- 날씨조회 -->
+	<select id="do_search_one" parameterType="com.sist.retail.vo.SaleProductVo" resultType="com.sist.retail.vo.SaleProductVo">
+		SELECT ADR
+		FROM STORE_TB
+	     WHERE STO_ID = '11111'
+	</select>
+</mapper>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
