@@ -88,7 +88,7 @@
               var phoNo="${list.phoNo}";
               var adr="${list.adr}";
               var contents="지점명 : "+stoNm+"<br/>"+"점주명 : "+ownId+"<br/>"+"핸드폰번호 : "+phoNo+"<br/>"+"주소 : "+adr;
-              addMarker(map,parseFloat(paramlat),parseFloat(paramlot),contents);
+              addMarker(map,parseFloat(paramlat),parseFloat(paramlot),contents);//parseFloat은 위도경도 변환시  인트형으로 변환되지 않게 
               </c:forEach>
            }
     function addMarker(map, lat, lot,contents) {
