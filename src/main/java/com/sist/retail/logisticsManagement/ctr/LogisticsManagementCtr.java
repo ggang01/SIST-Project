@@ -50,7 +50,7 @@ public class LogisticsManagementCtr
 		String stoId = req.getParameter("stoId");
 		wVo.setStoId(stoId);
 		wVo=(SaleProductVo) logisticsManagementSvc.do_searchOne(wVo);
-		String addr=wVo.getAdr();
+		String addr=wVo.getAdr();//검색된주소저장
 		
 		Pattern[] p=new Pattern[city.length];
 		for(int i=0;i<p.length;i++){
