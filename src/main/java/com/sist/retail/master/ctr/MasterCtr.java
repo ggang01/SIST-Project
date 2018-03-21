@@ -129,7 +129,7 @@ public class MasterCtr {
 	public String mainPage(HttpServletRequest req,HttpServletResponse response){
 			return "master/mainPage";
 	}
-	@RequestMapping(value="/rank.do")	
+	@RequestMapping(value="/rank.do")//	
 	public void rank(HttpServletRequest req,HttpServletResponse response){
 		String div=StringUtil.nvl(req.getParameter("div"), "");
 		JSONArray  jsonar=new JSONArray();
